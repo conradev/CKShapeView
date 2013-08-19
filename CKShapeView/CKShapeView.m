@@ -78,12 +78,12 @@
 
     if ([layer isEqual:self.layer] && [[NSNull null] isEqual:action]) {
         if ([self shouldForwardSelector:NSSelectorFromString(key)]) {
-            CABasicAnimation *animation = (CABasicAnimation *)[layer actionForKey:@"bounds"];
-            animation.fromValue = nil;
-            animation.toValue = nil;
-            animation.byValue = nil;
-            animation.keyPath = key;
-            action = animation;
+            CABasicAnimation *animation = (CABasicAnimation *)[self actionForLayer:layer forKey:@"bounds"];
+            if ([animation isKindOfClass:[CABasicAnimation class]]) {
+                animation.fromValue = [layer valueForKey:key];
+                animation.keyPath = key;
+                action = animation;
+            }
         }
     }
 
