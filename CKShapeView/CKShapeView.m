@@ -39,6 +39,85 @@
     return (![self respondsToSelector:aSelector] && [self shouldForwardSelector:aSelector]) ? self.layer : self;
 }
 
+- (void)setPath:(UIBezierPath *)path {
+    self.layer.path = path.CGPath;
+    self.layer.fillRule = path.usesEvenOddFillRule ? kCAFillRuleEvenOdd : kCAFillRuleNonZero;
+    self.layer.lineWidth = path.lineWidth;
+    self.layer.miterLimit = path.miterLimit;
+
+    switch (path.lineCapStyle) {
+        case kCGLineCapButt:
+            self.layer.lineCap = kCALineCapButt;
+            break;
+        case kCGLineCapRound:
+            self.layer.lineCap = kCALineCapRound;
+            break;
+        case kCGLineCapSquare:
+            self.layer.lineCap = kCALineCapSquare;
+            break;
+    }
+
+    switch (path.lineJoinStyle) {
+        case kCGLineJoinMiter:
+            self.layer.lineJoin = kCALineJoinMiter;
+            break;
+        case kCGLineJoinRound:
+            self.layer.lineJoin = kCALineJoinRound;
+            break;
+        case kCGLineJoinBevel:
+            self.layer.lineJoin = kCALineJoinBevel;
+            break;
+    }
+
+    NSInteger count;
+    [path getLineDash:NULL count:&count phase:NULL];
+    CGFloat pattern[count], phase;
+    [path getLineDash:pattern count:NULL phase:&phase];
+
+    NSMutableArray *lineDashPattern = [NSMutableArray array];
+    for (NSUInteger i = 0; i < count; i++) {
+        [lineDashPattern addObject:@(pattern[i])];
+    }
+
+    self.layer.lineDashPattern = [lineDashPattern copy];
+    self.layer.lineDashPhase = phase;
+}
+
+- (UIBezierPath *)path {
+    UIBezierPath *path = [UIBezierPath bezierPathWithCGPath:self.layer.path];
+    path.lineWidth = self.layer.lineWidth;
+    path.usesEvenOddFillRule = (self.layer.fillRule == kCAFillRuleEvenOdd);
+    path.lineWidth = self.layer.lineWidth;
+    path.miterLimit = self.layer.miterLimit;
+
+    NSString *lineCap = self.layer.lineCap;
+    if ([lineCap isEqualToString:kCALineCapButt]) {
+        path.lineCapStyle = kCGLineCapButt;
+    } else if ([lineCap isEqualToString:kCALineCapRound]) {
+        path.lineCapStyle = kCGLineCapRound;
+    } else if ([lineCap isEqualToString:kCALineCapSquare]) {
+        path.lineCapStyle = kCGLineCapSquare;
+    }
+
+    NSString *lineJoin = self.layer.lineJoin;
+    if ([lineJoin isEqualToString:kCALineJoinMiter]) {
+        path.lineJoinStyle = kCGLineJoinMiter;
+    } else if ([lineJoin isEqualToString:kCALineJoinRound]) {
+        path.lineJoinStyle = kCGLineJoinRound;
+    } else if ([lineJoin isEqualToString:kCALineJoinBevel]) {
+        path.lineJoinStyle = kCGLineJoinBevel;
+    }
+
+    CGFloat phase = self.layer.lineDashPhase;
+    NSInteger count = self.layer.lineDashPattern.count;
+    CGFloat pattern[count];
+    for (NSUInteger i = 0; i < count; i++) {
+        pattern[i] = [[self.layer.lineDashPattern objectAtIndex:i] floatValue];
+    }
+
+    [path setLineDash:pattern count:count phase:phase];
+}
+
 - (void)setFillColor:(UIColor *)fillColor {
     self.layer.fillColor = fillColor.CGColor;
 }
@@ -57,11 +136,7 @@
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
     BOOL inside = [super pointInside:point withEvent:event];
-    if (self.hitTestUsingPath) {
-        return CGPathContainsPoint(self.path, NULL, point, [self.fillRule isEqualToString:kCAFillRuleEvenOdd]) && inside;
-    } else {
-        return inside;
-    }
+    return self.hitTestUsingPath ? [self.path containsPoint:point] && inside : inside;
 }
 
 // This is a cleaner way of enabling animation, but it involves using a private API :(

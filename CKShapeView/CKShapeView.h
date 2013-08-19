@@ -12,7 +12,7 @@
 
 @property BOOL hitTestUsingPath;
 
-@property CGPathRef path;
+@property (copy) UIBezierPath *path;
 
 @property UIColor *fillColor;
 
