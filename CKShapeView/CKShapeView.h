@@ -10,7 +10,9 @@
 
 @interface CKShapeView : UIView
 
-@property UIBezierPath *path;
+@property BOOL hitTestUsingPath;
+
+@property CGPathRef path;
 
 @property UIColor *fillColor;
 

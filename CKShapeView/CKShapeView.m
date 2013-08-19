@@ -30,8 +30,6 @@
     return [CAShapeLayer class];
 }
 
-#pragma mark - Properties
-
 - (BOOL)shouldForwardSelector:(SEL)aSelector {
     return (![[self.layer superclass] instancesRespondToSelector:aSelector] &&
             [self.layer respondsToSelector:aSelector]);
@@ -39,14 +37,6 @@
 
 - (id)forwardingTargetForSelector:(SEL)aSelector {
     return (![self respondsToSelector:aSelector] && [self shouldForwardSelector:aSelector]) ? self.layer : self;
-}
-
-- (void)setPath:(UIBezierPath *)path {
-    self.layer.path = path.CGPath;
-}
-
-- (UIBezierPath *)path {
-    return [UIBezierPath bezierPathWithCGPath:self.layer.path];
 }
 
 - (void)setFillColor:(UIColor *)fillColor {
@@ -65,9 +55,16 @@
     return [UIColor colorWithCGColor:self.layer.strokeColor];
 }
 
-#pragma mark - Animation
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    BOOL inside = [super pointInside:point withEvent:event];
+    if (self.hitTestUsingPath) {
+        return CGPathContainsPoint(self.path, NULL, point, [self.fillRule isEqualToString:kCAFillRuleEvenOdd]) && inside;
+    } else {
+        return inside;
+    }
+}
 
-// This is a cleaner way of doing things, but it involves using a private API :(
+// This is a cleaner way of enabling animation, but it involves using a private API :(
 
 //- (BOOL)_shouldAnimatePropertyWithKey:(NSString *)key {
 //    return ([self shouldForwardSelector:NSSelectorFromString(key)] || [super _shouldAnimatePropertyWithKey:key]);
