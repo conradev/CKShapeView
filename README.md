@@ -13,7 +13,7 @@ It is completely configurable **and animatable**, so you can have custom drawn v
 ``` objc
 CKShapeView *pieView = [[CKShapeView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
 CGFloat width = CGRectGetWidth(pieView.bounds);
-pieView.path = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(pieView.bounds, width/4, width/4)];
+pieView.path = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(pieView.bounds, width/4, width/4)].CGPath;
 pieView.lineWidth = width/2;
 pieView.fillColor = nil;
 pieView.strokeColor = [UIColor blackColor];
