@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'CKShapeView'
-  s.version  = '0.1.0'
+  s.version  = '0.1.1'
   s.license  = 'MIT'
   s.summary  = 'UIView subclass that is backed by CAShapeLayer'
   s.homepage = 'https://github.com/conradev/CKShapeView'
