@@ -116,6 +116,8 @@
     }
 
     [path setLineDash:pattern count:count phase:phase];
+    
+    return path;
 }
 
 - (void)setFillColor:(UIColor *)fillColor {
