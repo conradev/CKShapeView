@@ -18,7 +18,7 @@
 
 @interface CKShapeView ()
 
-@property CAShapeLayer *layer;
+@property (readonly) CAShapeLayer *layer;
 
 @end
 
