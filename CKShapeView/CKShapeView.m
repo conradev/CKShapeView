@@ -18,7 +18,7 @@
 
 @interface CKShapeView ()
 
-@property (readonly) CAShapeLayer *layer;
+@property (nonatomic, readonly, retain) CAShapeLayer *layer;
 
 @end
 
