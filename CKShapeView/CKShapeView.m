@@ -152,7 +152,7 @@
 
     if ([layer isEqual:self.layer] && [[NSNull null] isEqual:action]) {
         if ([self shouldForwardSelector:NSSelectorFromString(key)]) {
-            CABasicAnimation *animation = (CABasicAnimation *)[self actionForLayer:layer forKey:@"bounds"];
+            CABasicAnimation *animation = (CABasicAnimation *)[self actionForLayer:layer forKey:@"backgroundColor"];
             if ([animation isKindOfClass:[CABasicAnimation class]]) {
                 animation.fromValue = [layer valueForKey:key];
                 animation.keyPath = key;
