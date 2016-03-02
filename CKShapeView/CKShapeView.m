@@ -24,6 +24,8 @@
 
 @implementation CKShapeView
 
+@dynamic layer;
+
 @dynamic path, fillColor, fillRule, strokeColor, strokeStart, strokeEnd, lineWidth, miterLimit, lineCap, lineJoin, lineDashPhase, lineDashPattern;
 
 + (Class)layerClass {
