@@ -9,6 +9,6 @@ Pod::Spec.new do |s|
                  :tag => '0.1.3' }
   s.source_files = 'CKShapeView'
   s.requires_arc = true
-  s.platform = :ios, '3.0'
+  s.platform = :ios, '4.3'
   s.frameworks = 'UIKit', 'QuartzCore'
 end
