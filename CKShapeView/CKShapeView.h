@@ -16,7 +16,7 @@
 
 @property UIColor *fillColor;
 
-@property (copy) NSString *fillRule;
+@property (copy) CAShapeLayerFillRule *fillRule;
 
 @property UIColor *strokeColor;
 
@@ -26,9 +26,9 @@
 
 @property CGFloat miterLimit;
 
-@property (copy) NSString *lineCap;
+@property (copy) CAShapeLayerLineCap *lineCap;
 
-@property (copy) NSString *lineJoin;
+@property (copy) CAShapeLayerLineJoin *lineJoin;
 
 @property CGFloat lineDashPhase;
 
